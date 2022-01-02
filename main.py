@@ -45,7 +45,7 @@ START_BUTTONS = InlineKeyboardMarkup(
 )
 
 
-@Bot.on_message(filters.private & filters.command(["start"]))
+@Bot.on_message
 async def start(bot, update):
     await update.reply_text(
         text=START_TEXT.format(update.from_user.mention),
@@ -54,8 +54,7 @@ async def start(bot, update):
     )
 
 
-@Bot.on_message(
-    filters.channel & filters.command(["str"]) (
+@Bot.on_message(filters.private & filters.command(["stt"]) &
         filters.text if FILTER_TEXT else None |
         filters.audio if FILTER_AUDIO else None |
         filters.document if FILTER_DOCUMENT else None |
@@ -69,9 +68,7 @@ async def start(bot, update):
         filters.location if FILTER_LOCATION else None |
         filters.venue if FILTER_VENUE else None |
         filters.poll if FILTER_POLL else None |
-        filters.game if FILTER_GAME else None
-    )
-)
+        filters.game if FILTER_GAME else None)
 async def Autopost(bot, message):
     fromid = await bot.ask(message.chat.id, Translation.FROM_MSG)
     if fromid.text.startswith('/'):
