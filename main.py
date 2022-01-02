@@ -69,33 +69,23 @@ async def start(bot, update):
         filters.venue if FILTER_VENUE else None |
         filters.poll if FILTER_POLL else None |
         filters.game if FILTER_GAME else None)
-async def Autopost(bot, message):
-    fromid = await bot.reply(message.chat.id, Translation.FROM_MSG)
+async def AutoPost(bot, message):
+    global FROM
+    global TO
+    fromid = await bot.ask(message.chat.id, Translation.FROM_MSG)
     if fromid.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
     elif not fromid.text.startswith('@'):
         return await message.reply(Translation.USERNAME)
-    toid = await bot.reply(message.chat.id, Translation.TO_MSG)
+    toid = await bot.ask(message.chat.id, Translation.TO_MSG)
     if toid.text.startswith('/'):
-        await message.reply(Translation.CANCEL)
-        return
-    skipno = await bot.reply(message.chat.id, Translation.SKIP_MSG)
-    if skipno.text.startswith('/'):
-        await message.reply(Translation.CANCEL)
-        return
-    limitno = await bot.reply(message.chat.id, Translation.LIMIT_MSG)
-    if limitno.text.startswith('/'):
-        await message.reply(Translation.CANCEL)
-        return
     await message.reply_text(
         text=Translation.DOUBLE_CHECK.format(fromid.text),
         reply_markup=reply_markup
     )
-    SKIP = skipno.text
     FROM = fromid.text
     TO = toid.text
-    LIMIT = limitno.text
     if re.match('-100\d+', TO):
         TO = int(TO)
 
