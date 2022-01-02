@@ -3,10 +3,6 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-FROM_CHANNELS = set(int(x) for x in os.environ.get("FROM_CHANNELS", "").split())
-TO_CHATS = set(int(x) for x in os.environ.get("TO_CHATS", "").split())
-AS_COPY = bool(os.environ.get("AS_COPY", True))
-
 # filters for auto post
 FILTER_TEXT = bool(os.environ.get("FILTER_TEXT", True))
 FILTER_AUDIO = bool(os.environ.get("FILTER_AUDIO", True))
@@ -76,7 +72,40 @@ async def start(bot, update):
         filters.game if FILTER_GAME else None
     )
 )
-async def autopost(bot, update):
+async def Autopost(bot, message):
+    fromid = await bot.ask(message.chat.id, Translation.FROM_MSG)
+    if fromid.text.startswith('/'):
+        await message.reply(Translation.CANCEL)
+        return
+    elif not fromid.text.startswith('@'):
+        return await message.reply(Translation.USERNAME)
+    toid = await bot.ask(message.chat.id, Translation.TO_MSG)
+    if toid.text.startswith('/'):
+        await message.reply(Translation.CANCEL)
+        return
+    skipno = await bot.ask(message.chat.id, Translation.SKIP_MSG)
+    if skipno.text.startswith('/'):
+        await message.reply(Translation.CANCEL)
+        return
+    limitno = await bot.ask(message.chat.id, Translation.LIMIT_MSG)
+    if limitno.text.startswith('/'):
+        await message.reply(Translation.CANCEL)
+        return
+    buttons = [[
+        InlineKeyboardButton('Yes', callback_data='start_public'),
+        InlineKeyboardButton('No', callback_data='close_btn')
+    ]]
+    reply_markup = InlineKeyboardMarkup(buttons)
+    await message.reply_text(
+        text=Translation.DOUBLE_CHECK.format(fromid.text),
+        reply_markup=reply_markup
+    )
+    SKIP = skipno.text
+    FROM = fromid.text
+    TO = toid.text
+    LIMIT = limitno.text
+    if re.match('-100\d+', TO):
+        TO = int(TO)
 
 
 
