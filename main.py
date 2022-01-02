@@ -55,7 +55,7 @@ async def start(bot, update):
 
 
 @Bot.on_message(
-    filters.channel & filter.command(run) (
+    filters.channel & filters.command(run) (
         filters.text if FILTER_TEXT else None |
         filters.audio if FILTER_AUDIO else None |
         filters.document if FILTER_DOCUMENT else None |
