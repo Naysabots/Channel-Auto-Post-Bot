@@ -77,22 +77,7 @@ async def start(bot, update):
     )
 )
 async def autopost(bot, update):
-    if len(FROM_CHANNELS) == 0 or len(TO_CHATS) == 0 or update.chat.id not in FROM_CHANNELS:
-        return
-    try:
-        for chat_id in TO_CHATS:
-            if AS_COPY:
-                if REPLY_MARKUP:
-                    await update.copy(
-                        chat_id=chat_id,
-                        reply_markup=update.reply_markup
-                    )
-                else:
-                    await update.copy(chat_id=chat_id)
-            else:
-                await update.forward(chat_id=chat_id)
-    except Exception as error:
-        print(error)
+
 
 
 Bot.run()
