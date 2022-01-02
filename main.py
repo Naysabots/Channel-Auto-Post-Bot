@@ -91,11 +91,6 @@ async def Autopost(bot, message):
     if limitno.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
-    buttons = [[
-        InlineKeyboardButton('Yes', callback_data='start_public'),
-        InlineKeyboardButton('No', callback_data='close_btn')
-    ]]
-    reply_markup = InlineKeyboardMarkup(buttons)
     await message.reply_text(
         text=Translation.DOUBLE_CHECK.format(fromid.text),
         reply_markup=reply_markup
