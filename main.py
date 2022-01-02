@@ -45,7 +45,7 @@ START_BUTTONS = InlineKeyboardMarkup(
 )
 
 
-@Bot.on_message
+@Bot.on_message(filters.private & filters.command(["start"]))
 async def start(bot, update):
     await update.reply_text(
         text=START_TEXT.format(update.from_user.mention),
@@ -70,21 +70,21 @@ async def start(bot, update):
         filters.poll if FILTER_POLL else None |
         filters.game if FILTER_GAME else None)
 async def Autopost(bot, message):
-    fromid = await bot.ask(message.chat.id, Translation.FROM_MSG)
+    fromid = await bot.reply(message.chat.id, Translation.FROM_MSG)
     if fromid.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
     elif not fromid.text.startswith('@'):
         return await message.reply(Translation.USERNAME)
-    toid = await bot.ask(message.chat.id, Translation.TO_MSG)
+    toid = await bot.reply(message.chat.id, Translation.TO_MSG)
     if toid.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
-    skipno = await bot.ask(message.chat.id, Translation.SKIP_MSG)
+    skipno = await bot.reply(message.chat.id, Translation.SKIP_MSG)
     if skipno.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
-    limitno = await bot.ask(message.chat.id, Translation.LIMIT_MSG)
+    limitno = await bot.reply(message.chat.id, Translation.LIMIT_MSG)
     if limitno.text.startswith('/'):
         await message.reply(Translation.CANCEL)
         return
